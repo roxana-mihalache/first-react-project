@@ -1,6 +1,6 @@
-import { atom } from 'recoil';
+import { atom } from "recoil";
 
 export const searchAtom = atom({
-  key: 'searchAtom',
-  default: '',
+  key: "searchAtom",
+  default: "",
 });

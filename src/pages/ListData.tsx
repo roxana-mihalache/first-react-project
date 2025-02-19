@@ -11,7 +11,7 @@ import {
   Button,
   Typography,
   Box,
-  Paper
+  Paper,
 } from "@mui/material";
 import {
   PaginationState,
@@ -20,10 +20,10 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from "@tanstack/react-table";
 import { FormattedMessage, useIntl } from "react-intl";
-import { endpoint } from '../assets/constants/constants';
+import { endpoint } from "../assets/constants/constants";
 import { Item } from "../hooks/useApi";
 
 const ListData = () => {
@@ -102,7 +102,11 @@ const ListData = () => {
       header: intl.formatMessage({ id: "table.header.isRepetable" }),
       accessorKey: "isRepetable",
       cell: ({ getValue }: { getValue: () => boolean }) =>
-        getValue() ? <FormattedMessage id="yes" /> : <FormattedMessage id="no" />,
+        getValue() ? (
+          <FormattedMessage id="yes" />
+        ) : (
+          <FormattedMessage id="no" />
+        ),
     },
   ];
 
@@ -119,9 +123,7 @@ const ListData = () => {
 
   return (
     <Box className="p-6 bg-gray-100 min-h-screen">
-      <Box
-       className="flex justify-between items-center gap-2 mb-4 border-b pb-2"
-      >
+      <Box className="flex justify-between items-center gap-2 mb-4 border-b pb-2">
         <Select
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
@@ -160,7 +162,7 @@ const ListData = () => {
               id="pagination.page"
               values={{
                 currentPage: table.getState().pagination.pageIndex + 1,
-                totalPages: table.getPageCount()
+                totalPages: table.getPageCount(),
               }}
             />
           </Typography>
@@ -193,7 +195,7 @@ const ListData = () => {
                   <TableCell key={header.id}>
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                   </TableCell>
                 ))}

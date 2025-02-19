@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
-import ItemForm from '../components/ItemForm';
-import useApi, { Item } from '../hooks/useApi';
-import { endpoint } from '../assets/constants/constants';
+import { useNavigate } from "react-router-dom";
+import ItemForm from "../components/ItemForm";
+import useApi, { Item } from "../hooks/useApi";
+import { endpoint } from "../assets/constants/constants";
 
 const AddItemPage = () => {
   const { addItem } = useApi(endpoint);
@@ -10,9 +10,9 @@ const AddItemPage = () => {
   const handleSubmit = async (data: Item) => {
     try {
       addItem(data);
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Error occured when trying to add element:', error);
+      console.error("Error occured when trying to add element:", error);
     }
   };
 

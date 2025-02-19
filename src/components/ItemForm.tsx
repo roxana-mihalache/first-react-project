@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Paper } from "@mui/material";
 import { FormattedMessage } from "react-intl";
@@ -19,13 +19,15 @@ const ItemForm = ({ onSubmit, initialData }: ItemFormProps) => {
     tags: "",
     description: "",
     isRepetable: false,
-    type: "", 
-    status: "", 
+    type: "",
+    status: "",
     deadline: "",
     ...initialData,
   });
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -114,7 +116,9 @@ const ItemForm = ({ onSubmit, initialData }: ItemFormProps) => {
             type="checkbox"
             name="isRepetable"
             checked={formData.isRepetable || false}
-            onChange={(e) => setFormData({ ...formData, isRepetable: e.target.checked })}
+            onChange={(e) =>
+              setFormData({ ...formData, isRepetable: e.target.checked })
+            }
           />
         </label>
         <Button type="submit" variant="contained" color="primary" fullWidth>

@@ -1,5 +1,5 @@
-import enMessages from './en.json';
-import roMessages from './ro.json';
+import enMessages from "./en.json";
+import roMessages from "./ro.json";
 
 type Messages = {
   [key: string]: string;

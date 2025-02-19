@@ -1,8 +1,8 @@
-import { AppBar, Toolbar, Button, Select, MenuItem } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
-import { useLanguage } from '../contexts/LanguageContext';
-import { Language } from '../assets/translations/messages';
+import { AppBar, Toolbar, Button, Select, MenuItem } from "@mui/material";
+import { Link } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
+import { useLanguage } from "../contexts/LanguageContext";
+import { Language } from "../assets/translations/messages";
 
 const Navbar = () => {
   const { language, setLanguage } = useLanguage();
