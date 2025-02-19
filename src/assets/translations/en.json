@@ -20,5 +20,8 @@
   "actions": "Actions",
   "yes": "Yes",
   "no": "No",
-  "search": "Search by name..."
+  "search": "Search by name...",
+  "language.option.english": "English",
+  "language.option.romanian": "Romanian",
+  "loading": "Loading..."
 }

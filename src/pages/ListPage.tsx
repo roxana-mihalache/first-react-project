@@ -1,109 +1,39 @@
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useIntl } from 'react-intl';
-import { useRecoilState } from 'recoil';
-import { searchAtom } from '../searhAtom';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { FormattedMessage } from 'react-intl';
 import useApi from '../hooks/useApi';
-import { Search } from '../components/Search';
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-} from '@mui/material';
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  ColumnDef,
-} from '@tanstack/react-table';
+import { endpoint } from '../assets/constants/constants';
 
 const ListPage = () => {
-  const { data: items, deleteItem } = useApi('https://retoolapi.dev/JIvieP/items');
+  const { data: items, isLoading, deleteItem } = useApi(endpoint);
   const navigate = useNavigate();
-  const { formatMessage } = useIntl();
-  const [searchTerm] = useRecoilState(searchAtom);
 
-
-  const filteredItems = useMemo(() => {
-    return items?.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
-  }, [items, searchTerm]);
-
-  const columns = useMemo<ColumnDef<any>[]>(
-    () => [
-      {
-        accessorKey: 'name',
-        header: () => formatMessage({ id: 'table.header.name' }),
-      },
-      {
-        accessorKey: 'amount',
-        header: () => formatMessage({ id: 'table.header.amount' }),
-      },
-      {
-        accessorKey: 'tags',
-        header: () => formatMessage({ id: 'table.header.tags' }),
-      },
-      {
-        id: 'actions',
-        header: () => formatMessage({ id: 'actions' }),
-        cell: ({ row }) => (
-          <div>
-            <Button onClick={() => navigate(`/edit-item/${row.original.id}`)}>
-              {formatMessage({ id: 'editItem' })}
-            </Button>
-            <Button onClick={() => deleteItem(row.original.id)} color="error">
-              {formatMessage({ id: 'delete' })}
-            </Button>
-          </div>
-        ),
-      },
-    ],
-    [deleteItem, navigate, formatMessage]
-  );
-
-  const table = useReactTable({
-    data: filteredItems,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  if (isLoading) return <p><FormattedMessage id="loading" /></p>;
 
   return (
-    <div>
-      <Search />
-      <TableContainer component={Paper} style={{ marginTop: '20px' }}>
-        <Table>
-          <TableHead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableCell key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell><FormattedMessage id="table.header.name" /></TableCell>
+            <TableCell><FormattedMessage id="table.header.amount" /></TableCell>
+            <TableCell><FormattedMessage id="actions" /></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {items?.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.amount}</TableCell>
+              <TableCell>
+                <Button onClick={() => navigate(`/edit-item/${item.id}`)}><FormattedMessage id="editItem" /></Button>
+                <Button onClick={() => item.id !== undefined && deleteItem(item.id)} color="error"><FormattedMessage id="delete" /></Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
