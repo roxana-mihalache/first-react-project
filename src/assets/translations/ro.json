@@ -20,5 +20,8 @@
   "actions": "Acțiuni",
   "yes": "Da",
   "no": "Nu",
-  "search": "Caută după nume..."
+  "search": "Caută după nume...",
+  "language.option.english": "Engleză",
+  "language.option.romanian": "Română",
+  "loading": "Se încarcă..."
 }

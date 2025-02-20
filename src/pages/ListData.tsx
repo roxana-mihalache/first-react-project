@@ -11,7 +11,7 @@ import {
   Button,
   Typography,
   Box,
-  Paper
+  Paper,
 } from "@mui/material";
 import {
   PaginationState,
@@ -20,20 +20,22 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from "@tanstack/react-table";
 import { FormattedMessage, useIntl } from "react-intl";
+import { endpoint } from "../assets/constants/constants";
+import { Item } from "../hooks/useApi";
 
 const ListData = () => {
   const intl = useIntl();
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Item[]>([]);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 3,
   });
 
   useEffect(() => {
-    fetch("https://retoolapi.dev/JIvieP/items")
+    fetch(endpoint)
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching data:", error));
@@ -64,7 +66,7 @@ const ListData = () => {
           href={getValue()}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: "blue", textDecoration: "underline" }}
+          className="text-blue-500 underline"
         >
           {getValue()}
         </a>
@@ -100,7 +102,11 @@ const ListData = () => {
       header: intl.formatMessage({ id: "table.header.isRepetable" }),
       accessorKey: "isRepetable",
       cell: ({ getValue }: { getValue: () => boolean }) =>
-        getValue() ? <FormattedMessage id="yes" /> : <FormattedMessage id="no" />,
+        getValue() ? (
+          <FormattedMessage id="yes" />
+        ) : (
+          <FormattedMessage id="no" />
+        ),
     },
   ];
 
@@ -116,25 +122,15 @@ const ListData = () => {
   });
 
   return (
-    <Box sx={{ p: 3, backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 2,
-          mb: 2,
-          borderBottom: "1px solid #ddd",
-          pb: 2,
-        }}
-      >
+    <Box className="p-6 bg-gray-100 min-h-screen">
+      <Box className="flex justify-between items-center gap-2 mb-4 border-b pb-2">
         <Select
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
             table.setPageIndex(0);
           }}
-          sx={{ width: 150, backgroundColor: "white", borderRadius: "8px" }}
+          className="w-36 bg-white rounded-lg"
         >
           {[2, 3, 4, 6, 10, 15].map((value) => (
             <MenuItem key={value} value={value}>
@@ -142,19 +138,13 @@ const ListData = () => {
             </MenuItem>
           ))}
         </Select>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box className="flex justify-between items-center gap-2 mb-4 border-b pb-2">
           <Button
             variant="contained"
             color="primary"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            sx={{
-              minWidth: 32,
-              borderRadius: "50%",
-              fontSize: "1.5rem",
-              boxShadow: "none",
-              backgroundColor: "#1976d2",
-            }}
+            className="w-8 h-8 rounded-full text-xl"
           >
             {"<<"}
           </Button>
@@ -163,22 +153,16 @@ const ListData = () => {
             color="primary"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            sx={{
-              minWidth: 32,
-              borderRadius: "50%",
-              fontSize: "1.5rem",
-              boxShadow: "none",
-              backgroundColor: "#1976d2",
-            }}
+            className="w-8 h-8 rounded-full text-xl"
           >
             {"<"}
           </Button>
-          <Typography variant="body1" sx={{ mx: 1 }}>
+          <Typography variant="body1" className="mx-2">
             <FormattedMessage
               id="pagination.page"
               values={{
                 currentPage: table.getState().pagination.pageIndex + 1,
-                totalPages: table.getPageCount()
+                totalPages: table.getPageCount(),
               }}
             />
           </Typography>
@@ -187,13 +171,7 @@ const ListData = () => {
             color="primary"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            sx={{
-              minWidth: 32,
-              borderRadius: "50%",
-              fontSize: "1.5rem",
-              boxShadow: "none",
-              backgroundColor: "#1976d2",
-            }}
+            className="w-8 h-8 rounded-full text-xl"
           >
             {">"}
           </Button>
@@ -202,19 +180,13 @@ const ListData = () => {
             color="primary"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
-            sx={{
-              minWidth: 32,
-              borderRadius: "50%",
-              fontSize: "1.5rem",
-              boxShadow: "none",
-              backgroundColor: "#1976d2",
-            }}
+            className="w-8 h-8 rounded-full text-xl"
           >
             {">>"}
           </Button>
         </Box>
       </Box>
-      <TableContainer component={Paper} sx={{ mb: 2 }}>
+      <TableContainer component={Paper} className="mb-4">
         <Table>
           <TableHead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -223,7 +195,7 @@ const ListData = () => {
                   <TableCell key={header.id}>
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                   </TableCell>
                 ))}

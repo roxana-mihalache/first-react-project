@@ -1,78 +1,131 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { TextField, Button, Paper } from "@mui/material";
+import { FormattedMessage } from "react-intl";
+import { Item } from "../hooks/useApi";
 
+interface ItemFormProps {
+  onSubmit: (data: Item) => void;
+  initialData?: Item;
+}
 
-const ItemForm = () => {
+const ItemForm = ({ onSubmit, initialData }: ItemFormProps) => {
   const navigate = useNavigate();
-  const intl = useIntl();
-  const [formData, setFormData] = useState({
-    name: '',
-    amount: 0,
-    url: '',
-    tags: '',
-    description: '',
+
+  const [formData, setFormData] = useState<Item>({
+    name: "",
+    amount: "",
+    url: "",
+    tags: "",
+    description: "",
+    isRepetable: false,
+    type: "",
+    status: "",
+    deadline: "",
+    ...initialData,
   });
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetch('https://retoolapi.dev/JIvieP/items', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    }).then(() => navigate('/'));
+    onSubmit(formData);
+    navigate("/");
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-bold mb-4">
-        <FormattedMessage id="addItem" />
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
+    <Paper className="p-6 max-w-md mx-auto">
+      <form onSubmit={handleSubmit}>
+        <TextField
+          label={<FormattedMessage id="table.header.name" />}
           name="name"
           value={formData.name}
           onChange={handleInputChange}
-          placeholder={intl.formatMessage({ id: 'table.header.name' })}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          fullWidth
+          required
+          margin="normal"
         />
-        <input
-          type="number"
+        <TextField
+          label={<FormattedMessage id="table.header.amount" />}
           name="amount"
           value={formData.amount}
           onChange={handleInputChange}
-          placeholder={intl.formatMessage({ id: 'table.header.amount' })}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          fullWidth
+          required
+          margin="normal"
         />
-        <input
-          type="text"
+        <TextField
+          label={<FormattedMessage id="table.header.url" />}
           name="url"
-          value={formData.url}
+          value={formData.url || ""}
           onChange={handleInputChange}
-          placeholder={intl.formatMessage({ id: 'table.header.url' })}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          fullWidth
+          margin="normal"
         />
-        <textarea
+        <TextField
+          label={<FormattedMessage id="table.header.tags" />}
+          name="tags"
+          value={formData.tags}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label={<FormattedMessage id="table.header.type" />}
+          name="type"
+          value={formData.type}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label={<FormattedMessage id="table.header.status" />}
+          name="status"
+          value={formData.status}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label={<FormattedMessage id="table.header.deadline" />}
+          name="deadline"
+          type="date"
+          value={formData.deadline}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label={<FormattedMessage id="table.header.description" />}
           name="description"
           value={formData.description}
           onChange={handleInputChange}
-          placeholder={intl.formatMessage({ id: 'table.header.description' })}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          fullWidth
+          multiline
+          rows={3}
+          margin="normal"
         />
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-        >
+        <label>
+          <FormattedMessage id="table.header.isRepetable" />
+          <input
+            type="checkbox"
+            name="isRepetable"
+            checked={formData.isRepetable || false}
+            onChange={(e) =>
+              setFormData({ ...formData, isRepetable: e.target.checked })
+            }
+          />
+        </label>
+        <Button type="submit" variant="contained" color="primary" fullWidth>
           <FormattedMessage id="submit" />
-        </button>
+        </Button>
       </form>
-    </div>
+    </Paper>
   );
 };
 
